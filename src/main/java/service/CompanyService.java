@@ -1,6 +1,6 @@
 package service;
 
-import dao.CompanyDaoImpl;
+import dao.daoImpl.CompanyDaoImpl;
 import model.Company;
 
 import java.sql.Date;

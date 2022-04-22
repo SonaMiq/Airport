@@ -7,6 +7,8 @@ import service.PassengerService;
 
 public class Main {
     public static void main(String[] args) {
-        new PassengerService().create("Sona Mikayelyan", "374-91106344", "Armenia", "Metsavan");
+
+
+        System.out.println(new PassengerService().findId(2));
     }
 }

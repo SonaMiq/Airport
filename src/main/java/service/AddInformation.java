@@ -51,6 +51,9 @@ public class AddInformation {
                 s = bufferedReader.readLine();
                 if (s == null)
                     break;
+                if(s.contains("'")){
+                    s=s.replace("'","՛");
+                }
                 rslt = s.split(",");
                 countryCity.add(new Address(rslt[2],rslt[3]));
             }

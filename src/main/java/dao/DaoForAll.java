@@ -12,5 +12,7 @@ public interface DaoForAll<T> {
     void update(int id, T t);
 
     Set<T> findAll();
+
+    Set<T> get(int offset,int perPage,String sort);
 }
 

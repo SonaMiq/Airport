@@ -1,5 +1,6 @@
-package dao;
+package dao.daoImpl;
 
+import dao.DaoForAll;
 import model.Company;
 import service.DatabaseConnection;
 
@@ -75,5 +76,10 @@ public class CompanyDaoImpl implements DaoForAll<Company> {
             e.printStackTrace();
         }
         return cmp;
+    }
+
+    @Override
+    public Set<Company> get(int offset, int perPage, String sort) {
+        return null;
     }
 }
