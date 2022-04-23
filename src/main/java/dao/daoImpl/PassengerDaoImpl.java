@@ -31,14 +31,14 @@ public class PassengerDaoImpl implements DaoForAll<Passenger> {
 
     @Override
     public void create(Passenger passenger) {
-        AddressDaoImpl addressDao=new AddressDaoImpl();
-      int adrsID=addressDao.getID(passenger.getAddress().getCountry(),passenger.getAddress().getCity());
-      if(adrsID==-1){
-          addressDao.create(passenger.getAddress());
-          adrsID=addressDao.getID(passenger.getAddress().getCountry(),passenger.getAddress().getCity());
-      }
+        AddressDaoImpl addressDao = new AddressDaoImpl();
+        int adrsID = addressDao.getID(passenger.getAddress().getCountry(), passenger.getAddress().getCity());
+        if (adrsID == -1) {
+            addressDao.create(passenger.getAddress());
+            adrsID = addressDao.getID(passenger.getAddress().getCountry(), passenger.getAddress().getCity());
+        }
 
-        String query = "Insert into passenger(name_psg,phone,ID_adrs) values('"+passenger.getName()+"','"+passenger.getPhone()+"','"+adrsID+"');";
+        String query = "Insert into passenger(name_psg,phone,ID_adrs) values('" + passenger.getName() + "','" + passenger.getPhone() + "','" + adrsID + "');";
         try (Statement stmt = DatabaseConnection.getDbConnection().getConnection().createStatement()) {
             stmt.execute(query);
 
@@ -60,13 +60,13 @@ public class PassengerDaoImpl implements DaoForAll<Passenger> {
     @Override
     public void update(int id, Passenger passenger) {
 
-        AddressDaoImpl addressDao=new AddressDaoImpl();
-        int adrsID=addressDao.getID(passenger.getAddress().getCountry(),passenger.getAddress().getCity());
-        if(adrsID==-1){
+        AddressDaoImpl addressDao = new AddressDaoImpl();
+        int adrsID = addressDao.getID(passenger.getAddress().getCountry(), passenger.getAddress().getCity());
+        if (adrsID == -1) {
             addressDao.create(passenger.getAddress());
-            adrsID=addressDao.getID(passenger.getAddress().getCountry(),passenger.getAddress().getCity());
+            adrsID = addressDao.getID(passenger.getAddress().getCountry(), passenger.getAddress().getCity());
         }
-        String query = "update passenger set name_psg='" + passenger.getName()+"', phone='"+passenger.getPhone()+"',ID_adrs="+adrsID;
+        String query = "update passenger set name_psg='" + passenger.getName() + "', phone='" + passenger.getPhone() + "',ID_adrs=" + adrsID;
         try (Statement stmt = DatabaseConnection.getDbConnection().getConnection().createStatement()) {
             stmt.execute(query);
         } catch (SQLException e) {
@@ -113,6 +113,20 @@ public class PassengerDaoImpl implements DaoForAll<Passenger> {
             System.out.println("no");
         }
         return passengerSet;
+    }
+
+    public Set<Passenger> getPassengersOfTrip(int tripNo) {
+        Set<Passenger> passengers = new HashSet<>();
+        String query = "SELECT * FROM pass_in_trip as pt join passenger as p on pt.ID_psg = p.ID_psg where trip_no = " + tripNo;
+        try (Statement stmt = DatabaseConnection.getDbConnection().getConnection().createStatement()) {
+            ResultSet res = stmt.executeQuery(query);
+            while (res.next()) {
+                passengers.add(new Passenger(res.getString("name_psg"), res.getString("phone"), new AddressDaoImpl().findByID(res.getInt("ID_adrs"))));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return passengers;
     }
 
 }

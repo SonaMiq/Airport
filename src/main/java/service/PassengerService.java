@@ -44,4 +44,8 @@ public class PassengerService {
         passInTripDao.delete(ID_psg,trip_no);
     }
 
+    public Set<Passenger> getPassengersOfTrip(int tripNumber){
+        return passengerDao.getPassengersOfTrip(tripNumber);
+    }
+
 }

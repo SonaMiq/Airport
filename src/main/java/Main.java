@@ -1,6 +1,7 @@
 import model.Company;
 import model.Passenger;
 import model.Trip;
+import service.AddInformation;
 import service.CompanyService;
 import service.PassengerService;
 import service.TripService;
@@ -8,6 +9,14 @@ import service.TripService;
 
 public class Main {
     public static void main(String[] args) {
+/*
+        AddInformation.addAddressInfo();
+        AddInformation.addPassengersInfo();
+        AddInformation.addCompaniesInfo();
+        AddInformation.addTripsInfo();
+        AddInformation.addPass_In_TripInfo();
+
+ */
 /*
         for (Company c : new CompanyService().get(1, 10, "name_cmp")) {
             System.out.println(c);
@@ -30,5 +39,8 @@ public class Main {
         }
 
          */
+       for(Passenger p: new PassengerService().getPassengersOfTrip(1181)){
+           System.out.println(p);
+       }
     }
 }
