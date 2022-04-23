@@ -9,6 +9,6 @@ public class Main {
     public static void main(String[] args) {
 
 
-        System.out.println(new PassengerService().findId(2));
+       AddInformation.addTripsInfo();
     }
 }

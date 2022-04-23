@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Time;
+import java.util.Objects;
 
 public class Trip {
     private int trip_no;
@@ -10,6 +11,16 @@ public class Trip {
     private String town_to;
     private Time time_out;
     private Time time_in;
+
+    public Trip(int trip_no, int ID_cmp, String plane, String town_from, String town_to, Time time_out, Time time_in) {
+        this.trip_no = trip_no;
+        this.ID_cmp = ID_cmp;
+        this.plane = plane;
+        this.town_from = town_from;
+        this.town_to = town_to;
+        this.time_out = time_out;
+        this.time_in = time_in;
+    }
 
     public int getTrip_no() {
         return trip_no;
@@ -65,5 +76,31 @@ public class Trip {
 
     public void setTime_in(Time time_in) {
         this.time_in = time_in;
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "trip_no=" + trip_no +
+                ", ID_cmp=" + ID_cmp +
+                ", plane='" + plane + '\'' +
+                ", town_from='" + town_from + '\'' +
+                ", town_to='" + town_to + '\'' +
+                ", time_out=" + time_out +
+                ", time_in=" + time_in +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Trip trip = (Trip) o;
+        return trip_no == trip.trip_no && ID_cmp == trip.ID_cmp && plane.equals(trip.plane) && town_from.equals(trip.town_from) && town_to.equals(trip.town_to) && time_out.equals(trip.time_out) && time_in.equals(trip.time_in);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(trip_no, ID_cmp, plane, town_from, town_to, time_out, time_in);
     }
 }

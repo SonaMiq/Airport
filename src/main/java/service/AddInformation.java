@@ -7,7 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalField;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 
@@ -40,7 +43,7 @@ public class AddInformation {
     }
 
     public static void addAddressInfo() {
-        AddressService addressService=new AddressService();
+        AddressService addressService = new AddressService();
         String file = "src/main/resources/passengers.txt";
         Set<Address> countryCity = new HashSet<>();
 
@@ -51,21 +54,22 @@ public class AddInformation {
                 s = bufferedReader.readLine();
                 if (s == null)
                     break;
-                if(s.contains("'")){
-                    s=s.replace("'","՛");
+                if (s.contains("'")) {
+                    s = s.replace("'", "՛");
                 }
                 rslt = s.split(",");
-                countryCity.add(new Address(rslt[2],rslt[3]));
+                countryCity.add(new Address(rslt[2], rslt[3]));
             }
-            for (Address address:countryCity) {
-                 addressService.create(address.getCountry(),address.getCity());
+            for (Address address : countryCity) {
+                addressService.create(address.getCountry(), address.getCity());
             }
         } catch (IOException e) {
             System.out.println("passengers.txt file for read is not found");
         }
     }
+
     public static void addPassengersInfo() {
-        PassengerService passengerService=new PassengerService();
+        PassengerService passengerService = new PassengerService();
         String file = "src/main/resources/passengers.txt";
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -76,14 +80,38 @@ public class AddInformation {
 
                 if (s == null)
                     break;
-                if(s.contains("'")){
-                    s=s.replace("'","՛");
+                if (s.contains("'")) {
+                    s = s.replace("'", "՛");
                 }
                 rslt = s.split(",");
-                passengerService.create(rslt[0],rslt[1],rslt[2],rslt[3]);
+                passengerService.create(rslt[0], rslt[1], rslt[2], rslt[3]);
             }
         } catch (IOException e) {
             System.out.println("passengers.txt file for read is not found");
+        }
+    }
+
+    public static void addTripsInfo() {
+        TripService tripService = new TripService();
+        String file = "src/main/resources/trips.txt";
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            String[] rslt = new String[7];
+            String s = "";
+            while (true) {
+                s = bufferedReader.readLine();
+
+                if (s == null)
+                    break;
+
+                rslt = s.split(",");
+                String time_out=rslt[5].split(" ")[1].substring(0,8);
+                String time_in=rslt[6].split(" ")[1].substring(0,8);
+                tripService.create(Integer.parseInt(rslt[0]), Integer.parseInt(rslt[1]), rslt[2], rslt[3], rslt[4],
+                        time_out,time_in);
+            }
+        } catch (IOException e) {
+            System.out.println("trips.txt file for read is not found");
         }
     }
 }

@@ -80,4 +80,5 @@ public class PassengerDaoImpl implements DaoForAll<Passenger> {
     public Set<Passenger> get(int offset, int perPage, String sort) {
         return null;
     }
+
 }
