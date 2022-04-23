@@ -1,12 +1,15 @@
 package dao.daoImpl;
 
 import dao.DaoForAll;
+import model.Address;
 import model.Passenger;
 import service.DatabaseConnection;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class PassengerDaoImpl implements DaoForAll<Passenger> {
@@ -73,12 +76,43 @@ public class PassengerDaoImpl implements DaoForAll<Passenger> {
 
     @Override
     public Set<Passenger> findAll() {
-        return null;
+        AddressDaoImpl addressDao = new AddressDaoImpl();
+        String query = "select * from passenger";
+        Set<Passenger> pss = new HashSet<>();
+        try (Statement stmt = DatabaseConnection.getDbConnection().getConnection().createStatement()) {
+            ResultSet res = stmt.executeQuery(query);
+            Address address = null;
+            while (res.next()) {
+                address = addressDao.findByID(res.getInt("ID_adrs"));
+                pss.add(new Passenger(res.getString("name_psg"), res.getString("phone"),
+                        new Address(address.getCountry(), address.getCity())));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pss;
     }
 
     @Override
     public Set<Passenger> get(int offset, int perPage, String sort) {
-        return null;
+        AddressDaoImpl addressDao = new AddressDaoImpl();
+        Passenger passenger;
+        Set<Passenger> passengerSet = new LinkedHashSet<>();
+        String query = "SELECT * from passenger " +
+                "ORDER BY " + sort + " " +
+                "LIMIT " + offset + " ," + perPage + " ";
+        try (Statement stmt = DatabaseConnection.getDbConnection().getConnection().createStatement()) {
+            ResultSet resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                Address address = addressDao.findByID(resultSet.getInt("ID_adrs"));
+                passenger = new Passenger(resultSet.getString("name_psg"),
+                        resultSet.getString("phone"), new Address(address.getCountry(), address.getCity()));
+                passengerSet.add(passenger);
+            }
+        } catch (SQLException e) {
+            System.out.println("no");
+        }
+        return passengerSet;
     }
 
 }

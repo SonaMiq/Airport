@@ -6,6 +6,8 @@ import model.Address;
 import model.Passenger;
 import model.Trip;
 
+import java.util.Set;
+
 public class PassengerService {
     private PassengerDaoImpl passengerDao = new PassengerDaoImpl();
     private PassInTripDao passInTripDao = new PassInTripDao();
@@ -18,6 +20,13 @@ public class PassengerService {
         return passengerDao.findByID(id);
     }
 
+    public Set<Passenger> get(int offset, int perPage, String sort){
+        return passengerDao.get(offset,perPage,sort);
+    }
+    public Set<Passenger> findAll(){
+        return passengerDao.findAll();
+    }
+
     public void delete(int id) {
         passengerDao.deleteById(id);
     }
@@ -25,6 +34,7 @@ public class PassengerService {
     public void update(int id, String newName, String newPhone, String newCountry, String newCity) {
         passengerDao.update(id, new Passenger(newName, newPhone, new Address(newCountry, newCity)));
     }
+
 
     void registerTrip(int trip_no, int ID_psg, String place) {
         passInTripDao.create(trip_no,ID_psg,place);

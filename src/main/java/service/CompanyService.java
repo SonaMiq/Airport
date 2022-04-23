@@ -23,4 +23,8 @@ public class CompanyService {
     public Set<Company> findAll() {
         return companyDao.findAll();
     }
+
+    public Set<Company> get(int offset, int perPage, String sort){
+        return companyDao.get(offset,perPage,sort);
+    }
 }

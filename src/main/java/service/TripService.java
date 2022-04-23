@@ -31,5 +31,15 @@ public class TripService {
             System.out.println(t);
         }
     }
+
+    public Set<Trip> get(int offset, int perPage, String sort) {
+        return tripDao.get(offset, perPage, sort);
+    }
+    public Set<Trip> getTripsTo(String city) {
+        return tripDao.getTripsTo(city);
+    }
+    public Set<Trip> getTripsFrom(String city) {
+        return tripDao.getTripsFrom(city);
+    }
 }
 

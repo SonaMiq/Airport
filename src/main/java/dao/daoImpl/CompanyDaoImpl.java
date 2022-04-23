@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class CompanyDaoImpl implements DaoForAll<Company> {
@@ -80,6 +81,21 @@ public class CompanyDaoImpl implements DaoForAll<Company> {
 
     @Override
     public Set<Company> get(int offset, int perPage, String sort) {
-        return null;
+        Company company;
+        Set<Company> cmp = new LinkedHashSet<>();
+        String query = "SELECT * from company " +
+                "ORDER BY " + sort + " " +
+                "LIMIT " + offset + " ," + perPage + " ";
+        try (Statement stmt = DatabaseConnection.getDbConnection().getConnection().createStatement()) {
+
+            ResultSet resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                company = new Company(resultSet.getString("name_cmp"), resultSet.getDate("date_found"));
+                cmp.add(company);
+            }
+        } catch (SQLException e) {
+            System.out.println("no");
+        }
+        return cmp;
     }
 }

@@ -1,16 +1,12 @@
 package service;
 
+import dao.PassInTripDao;
 import model.Address;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalField;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 
@@ -112,6 +108,27 @@ public class AddInformation {
             }
         } catch (IOException e) {
             System.out.println("trips.txt file for read is not found");
+        }
+    }
+
+    public static void addPass_In_TripInfo() {
+
+        String file = "src/main/resources/pass_in_trip.txt";
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            String[] rslt = new String[4];
+            String s = bufferedReader.readLine();
+            while (true) {
+                s = bufferedReader.readLine();
+
+                if (s == null)
+                    break;
+
+                rslt = s.split(",");
+              new PassInTripDao().createForFile(Integer.parseInt(rslt[0]),Integer.parseInt(rslt[1]),rslt[2].split(" ")[0],rslt[3]);
+            }
+        } catch (IOException e) {
+            System.out.println("pass_in_trip.txt file for read is not found");
         }
     }
 }
